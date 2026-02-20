@@ -56,7 +56,9 @@ export const Url = ({
         setError(null);
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10_000);
-        const modelsUrl = new URL('models', realUrl.endsWith('/') ? realUrl : `${realUrl}/`);
+        const baseUrl = new URL(realUrl.endsWith('/') ? realUrl : `${realUrl}/`);
+        const modelsUrl = new URL('models', baseUrl);
+        modelsUrl.search = baseUrl.search;
         const response = await fetch(modelsUrl, { signal: controller.signal });
         clearTimeout(timeoutId);
         if (!response.ok) {
